@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RandB AlgoLabs</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+    :root {
+      --bg: #0f1720;
+      --bg-alt: #172433;
+      --panel: rgba(15, 23, 32, 0.72);
+      --panel-strong: rgba(12, 18, 27, 0.9);
+      --line: rgba(182, 204, 227, 0.16);
+      --text: #edf3fb;
+      --muted: #a6b8cb;
+      --warm: #f0a84b;
+      --cool: #67d2ff;
+      --mint: #6ee7b7;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --sans: "Sora", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(103, 210, 255, 0.18), transparent 34%),
+        radial-gradient(circle at top right, rgba(240, 168, 75, 0.16), transparent 28%),
+        linear-gradient(180deg, #091018 0%, #0f1720 42%, #111c28 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent 90%);
+      pointer-events: none;
+      opacity: 0.2;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow,
+    .pill,
+    .label {
+      font-family: var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      padding: 32px 0 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .brand {
+      display: inline-flex;
+      gap: 12px;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(240, 168, 75, 0.24), rgba(103, 210, 255, 0.28));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      font-weight: 800;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 0.98rem;
+    }
+
+    .brand-copy span {
+      display: block;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .hero-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-side,
+    .section-card,
+    .timeline-card,
+    .footer-card {
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-copy::before,
+    .hero-side::before,
+    .section-card::before,
+    .footer-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 24%, transparent 70%, rgba(103, 210, 255, 0.06));
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      padding: 34px;
+      animation: rise 0.8s ease both;
+    }
+
+    .hero-side {
+      padding: 24px;
+      animation: rise 0.95s ease both;
+    }
+
+    .eyebrow {
+      color: var(--cool);
+      font-size: 0.72rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 5.6rem);
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      max-width: 9.5ch;
+    }
+
+    .hero-copy p {
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.75;
+      margin: 20px 0 0;
+    }
+
+    .accent {
+      color: var(--warm);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--warm), #ffd083);
+      color: #111827;
+    }
+
+    .button-secondary {
+      border-color: rgba(255, 255, 255, 0.16);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .hero-side .label {
+      color: var(--mint);
+      font-size: 0.72rem;
+      margin-bottom: 14px;
+    }
+
+    .hero-side h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+    }
+
+    .hero-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .hero-list li {
+      padding: 14px 14px 14px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hero-list strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .hero-signature {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .hero-signature strong {
+      color: var(--text);
+    }
+
+    main {
+      padding: 26px 0 56px;
+    }
+
+    section {
+      margin-top: 22px;
+    }
+
+    .section-card {
+      padding: 30px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+      margin: 10px 0 0;
+      font-size: clamp(1.8rem, 4vw, 2.9rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      max-width: 48ch;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .column-box {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .column-box h3 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+    }
+
+    .column-box p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      font-size: 0.72rem;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .capability {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: var(--panel-strong);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .capability h3 {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+    }
+
+    .capability p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .timeline-card {
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -40px auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(103, 210, 255, 0.24), transparent 68%);
+      pointer-events: none;
+    }
+
+    .timeline-card .date {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--cool);
+      margin-bottom: 10px;
+    }
+
+    .timeline-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.18rem;
+    }
+
+    .timeline-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.94rem;
+    }
+
+    .founder-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+    }
+
+    .founder-panel,
+    .support-panel {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .founder-panel h3,
+    .support-panel h3 {
+      margin: 0 0 12px;
+      font-size: 1.24rem;
+    }
+
+    .founder-panel p,
+    .support-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .support-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .footer-card {
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .footer-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .footnote {
+      padding: 20px 0 44px;
+      text-align: center;
+      color: rgba(237, 243, 251, 0.5);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+    }
+
+    .muted-link {
+      color: var(--cool);
+      text-decoration: none;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero-panel,
+      .columns,
+      .grid-3,
+      .timeline,
+      .founder-grid,
+      .footer-card {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-copy,
+      .hero-side,
+      .section-card,
+      .footer-card {
+        padding: 22px;
+      }
+
+      .topbar {
+        margin-bottom: 22px;
+      }
+
+      h1 {
+        max-width: none;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="topbar">
+        <a class="brand" href="#top">
+          <div class="brand-mark">R+B</div>
+          <div class="brand-copy">
+            <strong>RandB AlgoLabs</strong>
+            <span>Research studio for live signal systems</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="hero-panel" id="top">
+        <div class="hero-copy">
+          <div class="eyebrow">Public research. Real systems. No black box theater.</div>
+          <h1>Signal research labs for markets and sport.</h1>
+          <p>
+            RandB AlgoLabs is the parent studio behind a set of focused research properties:
+            <span class="accent">systematic signal labs for stocks, crypto, futures, options, Kalshi, and Polymarket</span>,
+            plus a separate statistical research arm for NBA projections, risk, and game-level modeling.
+          </p>
+          <p>
+            The work is practical by design. We build research infrastructure, test ideas in public where possible,
+            and turn validated outputs into products people can actually use.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#timeline">See the delivery timeline</a>
+            <a class="button button-secondary" href="#labs">What the labs cover</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <strong>2</strong>
+              <span>core research tracks under one roof</span>
+            </div>
+            <div class="stat">
+              <strong>6+</strong>
+              <span>market surfaces across traditional and event-driven products</span>
+            </div>
+            <div class="stat">
+              <strong>4</strong>
+              <span>public properties scheduled between May 15, 2026 and January 1, 2027</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side">
+          <div class="label">Operating Thesis</div>
+          <h2>What we actually do</h2>
+          <ul class="hero-list">
+            <li>
+              <strong>Market signal research</strong>
+              We test systematic ideas across equities, crypto, futures, options, prediction markets, and related data exhaust.
+            </li>
+            <li>
+              <strong>Statistical basketball research</strong>
+              We run projection, risk, and insight pipelines for NBA decision support and content products.
+            </li>
+            <li>
+              <strong>Productization layer</strong>
+              We turn the best research into focused public brands instead of forcing everything into one giant umbrella app.
+            </li>
+          </ul>
+          <div class="hero-signature">
+            <strong>Leadership</strong><br />
+            RandB AlgoLabs is led by CEO Rachel B. Philip, with the studio focused on turning serious research systems into distinct public products with a cleaner, more human-facing presentation.
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section id="labs">
+        <div class="section-card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Research Areas</div>
+              <h2>Two engines, multiple front doors.</h2>
+            </div>
+            <p>
+              The lab structure is simple: one side studies market signals and execution frameworks, the other studies basketball outcomes and player-level projection systems.
+            </p>
+          </div>
+
+          <div class="columns">
+            <article class="column-box">
+              <h3>Multi-Asset Signal Research</h3>
+              <p>
+                This side of the lab explores signal generation, validation, ranking, and research tooling for liquid markets and event-driven contracts. It is where the StockArithm and Predeve lines start.
+              </p>
+              <div class="tag-row">
+                <span class="pill">Stocks</span>
+                <span class="pill">Crypto</span>
+                <span class="pill">Futures</span>
+                <span class="pill">Options</span>
+                <span class="pill">Kalshi</span>
+                <span class="pill">Polymarket</span>
+              </div>
+            </article>
+
+            <article class="column-box">
+              <h3>NBA Statistical Research</h3>
+              <p>
+                This side of the lab supports daily projections, player and team risk views, model outputs, and deeper basketball analytics. It is the research base behind CourtDominion and WinStaPlayer.
+              </p>
+              <div class="tag-row">
+                <span class="pill">Projections</span>
+                <span class="pill">Risk Engine</span>
+                <span class="pill">Insights</span>
+                <span class="pill">Player Models</span>
+                <span class="pill">Game Context</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Capabilities</div>
+              <h2>Built like labs, not landing-page fiction.</h2>
+            </div>
+            <p>
+              The intent is not vague “AI for finance” copy. It is research operations: collect data, test ideas, measure performance, keep a record, and ship the strongest outputs into standalone products.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <article class="capability">
+              <h3>Research Infrastructure</h3>
+              <p>
+                Pipeline work for ingestion, simulation, validation, scoring, reporting, and repeatable daily or nightly runs.
+              </p>
+            </article>
+
+            <article class="capability">
+              <h3>Public-Facing Products</h3>
+              <p>
+                Each property gets its own voice and user surface, while the parent lab keeps the broader research story coherent.
+              </p>
+            </article>
+
+            <article class="capability">
+              <h3>Receipts Over Hype</h3>
+              <p>
+                The brand position should stay grounded: show what is live, what is experimental, what is scheduled, and what still needs proving.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Studio Leadership</div>
+              <h2>A tighter public face for the lab.</h2>
+            </div>
+            <p>
+              The parent brand should feel credible and polished without losing the research-first character behind the products.
+            </p>
+          </div>
+
+          <div class="founder-grid">
+            <article class="founder-panel">
+              <h3>CEO Rachel B. Philip</h3>
+              <p>
+                Rachel B. Philip serves as CEO of RandB AlgoLabs, guiding the studio as it grows from internal research infrastructure into a family of public-facing products. The role of the parent brand is to hold the long-range vision together: disciplined experimentation, clear product positioning, and thoughtful execution across both market and basketball research.
+              </p>
+            </article>
+
+            <article class="support-panel">
+              <h3>Questions and support</h3>
+              <p>
+                Questions about the studio, product launches, or customer-facing properties can be directed to <a class="muted-link" href="mailto:customersupport@randbalgolabs.com">customersupport@randbalgolabs.com</a>. That gives the site a clear support path now, before the individual product sites fully split out.
+              </p>
+              <div class="support-actions">
+                <a class="button button-primary" href="mailto:customersupport@randbalgolabs.com">Contact Support</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="timeline">
+        <div class="section-card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Delivery Map</div>
+              <h2>Current rollout timeline.</h2>
+            </div>
+            <p>
+              The next eight months are about separating the research arms into clear public products with tighter positioning and a narrower user promise for each one.
+            </p>
+          </div>
+
+          <div class="timeline">
+            <article class="timeline-card">
+              <div class="date">May 15, 2026</div>
+              <h3><span class="accent">stockarithm.com</span></h3>
+              <p>
+                First public market research property focused on systematic signal discovery, validation, and transparent experimentation.
+              </p>
+            </article>
+
+            <article class="timeline-card">
+              <div class="date">August 1, 2026</div>
+              <h3><span class="accent">courtdominion.com</span></h3>
+              <p>
+                NBA statistical research surface for projections, daily outputs, and model-driven basketball decision support.
+              </p>
+            </article>
+
+            <article class="timeline-card">
+              <div class="date">December 1, 2026</div>
+              <h3><span class="accent">predeve.com</span></h3>
+              <p>
+                Event and prediction-market research product built around structured contracts, signal framing, and edge discovery.
+              </p>
+            </article>
+
+            <article class="timeline-card">
+              <div class="date">January 1, 2027</div>
+              <h3><span class="accent">winstaplayer.com</span></h3>
+              <p>
+                Player-centric basketball research experience built from the same statistical backbone, with a more focused end-user lens.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="footer-card">
+          <div>
+            <div class="eyebrow">Contact</div>
+            <strong>Support and general questions have a direct line.</strong>
+            <p>
+              For support, launch questions, or general inquiries about RandB AlgoLabs and its upcoming products, contact <a class="muted-link" href="mailto:customersupport@randbalgolabs.com">customersupport@randbalgolabs.com</a>.
+            </p>
+          </div>
+          <a class="button button-secondary" href="mailto:customersupport@randbalgolabs.com">customersupport@randbalgolabs.com</a>
+        </div>
+      </section>
+    </main>
+
+    <div class="footnote">
+      RandB AlgoLabs is the parent research studio behind market signal systems and basketball statistical products.
+      Public brand launches scheduled across 2026 and January 1, 2027.
+    </div>
+  </div>
+</body>
+</html>
