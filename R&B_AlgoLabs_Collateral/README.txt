@@ -13,6 +13,8 @@ FOLDER STRUCTURE
 02_DBB2_Core/
   ├─ DBB2_Executive_Summary.pdf
   │  Master document. Send to all prospects first.
+  ├─ DBB2_B2B_Executive_Summary.pdf
+  │  Business-facing version for enterprise and platform buyers.
   ├─ DBB2_API_Catalog.pdf
   │  One-page product menu. What DBB2 offers.
   ├─ DBB2_Pilot_Guide.pdf
@@ -31,6 +33,8 @@ FOLDER STRUCTURE
 04_StockArithm/
   ├─ StockArithm_Executive_Summary.pdf
   │  Platform overview for financial market focus
+  ├─ StockArithm_B2B_Executive_Summary.pdf
+  │  Business-facing version for enterprise and platform buyers.
   └─ StockArithm_for_Financial_Media.pdf
      Use with: Financial publishers, market newsletters, quant media
 
@@ -59,6 +63,16 @@ FINANCIAL MEDIA/PUBLISHER:
   1. StockArithm_Executive_Summary.pdf
   2. StockArithm_for_Financial_Media.pdf
   3. DBB2_Pilot_Guide.pdf + DBB2_FAQ.pdf
+
+DBB2 B2B PLATFORM PROSPECT:
+  1. DBB2_B2B_Executive_Summary.pdf
+  2. DBB2_API_Catalog.pdf + DBB2_Pilot_Guide.pdf
+  3. DBB2_FAQ.pdf
+
+STOCKARITHM B2B PROSPECT:
+  1. StockArithm_B2B_Executive_Summary.pdf
+  2. StockArithm_for_Financial_Media.pdf
+  3. Company overview for late-stage context
 
 GENERIC ENTERPRISE PROSPECT:
   1. DBB2_Executive_Summary.pdf
